@@ -1,0 +1,34 @@
+version: "3.8"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+    restart: on-failure
+    environment:
+      - DB_HOST=db
+      - DB_USER=jay
+      - DB_PASSWORD=jay
+      - DB_NAME=gotham
+
+  db:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=gotham
+      - MYSQL_USER=jay
+      - MYSQL_PASSWORD=jay
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data:/var/lib/mysql
+    networks:
+      - mynetwork
+networks:
+  mynetwork:
